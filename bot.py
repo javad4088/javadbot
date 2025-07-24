@@ -1,20 +1,15 @@
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+import os
+from telegram.ext import Updater, CommandHandler
 
-# فقط آی‌دی مجاز
-ALLOWED_ID = 795698933  # آیدی عددی شما
-
-# توکن ربات
-TOKEN = 'توکن_ربات_شخصی_شما'
+TOKEN = os.environ.get("BOT_TOKEN")
+USER_ID = os.environ.get("AUTHORIZED_USER_ID")
 
 def start(update, context):
-    if update.effective_user.id != ALLOWED_ID:
+    if str(update.effective_user.id) != str(USER_ID):
         return
-    context.bot.send_message(chat_id=update.effective_chat.id, text="✅ ربات آماده است!")
+    update.message.reply_text("✅ ربات متصل شد!")
 
-updater = Updater(token=TOKEN, use_context=True)
+updater = Updater(TOKEN)
 dp = updater.dispatcher
-
 dp.add_handler(CommandHandler("start", start))
-
 updater.start_polling()
-updater.idle()
